@@ -97,7 +97,12 @@ export default class StartServiceCommand extends TransportCommand {
         if ((options as StartActivityOptions).wait) {
             args.push('-W');
         }
-        args.push('-n', this.escape(`${pkg}/.${service}`));
+        const name = (
+            service.indexOf('.') > 0
+            ? `${pkg}/${service}`
+            : `${pkg}/.${service}`
+        );
+        args.push('-n', this.escape(name));
         args.push('--user', this.escape(options.user || 0));
         command = command || 'shell:am startservice ';
         return super.execute(serial, command, args.join(' '))
